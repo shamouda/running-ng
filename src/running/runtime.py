@@ -154,7 +154,11 @@ class D8(JavaScriptRuntime):
         # The format is "Fatal javascript OOM in ..."
         # such as "Fatal javascript OOM in Reached heap limit"
         # or "Fatal javascript OOM in Ineffective mark-compacts near heap limit"
-        return b"Fatal javascript OOM in" in output
+        # or Fatal JavaScript out of memory: Reached heap limit
+        for pattern in [b"Fatal javascript OOM in", b"Fatal JavaScript out of memory"]:
+            if pattern in output:
+                return True
+        return False
 
 
 @register(Runtime)
