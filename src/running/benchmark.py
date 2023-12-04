@@ -327,7 +327,7 @@ class ChromeBenchmark(Benchmark):
         self.benchmark_url = benchmark_url
         self.timing_iteration = timing_iteration
 
-    def __st -> str:
+    def __str__(self) -> str:
         return self.to_string(DummyRuntime("chrome"))
 
     def attach_modifiers(self, modifiers: Sequence[Modifier]) -> 'ChromeBenchmark':
@@ -337,11 +337,11 @@ class ChromeBenchmark(Benchmark):
                 jb.js_args.extend(m.val)
             elif type(m) == ChromeArg:
                 jb.chrome_args.extend(m.val)
-           elif type(m) == ProgramArg:
+            elif type(m) == ProgramArg:
                 jb.program_args.extend(m.val)
         return jb
 
-    def get_full_aret_full_args(self, runtime: Runtime) -> List[Union[str, Path]]:
+    def get_full_args(self, runtime: Runtime) -> List[Union[str, Path]]:
         cmd = super().get_full_args(runtime)
         cmd.append(runtime.get_executable())
         cmd.extend(self.chrome_args)

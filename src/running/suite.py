@@ -6,6 +6,7 @@ from running.benchmark import (
     Benchmark,
     JavaScriptBenchmark,
     JuliaBenchmark,
+    ChromeBenchmark,
 )
 from running.runtime import OpenJDK, Runtime
 from running.modifier import JVMArg, Modifier
@@ -524,18 +525,30 @@ class JuliaGCBenchmarks(BenchmarkSuite):
 class Speedometer(BenchmarkSuite):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        timing_iteration = parse_timing_iteration(
+        self.timing_iteration = parse_timing_iteration(
             kwargs.get("timing_iteration"), "Speedometer")
-        self.benchmark_url = kwargs.get("benchmark_url"nchmark) -> int:
+        self.benchmark_url = kwargs.get("benchmark_url")
         self.minheap: Optional[str]
         self.minheap = kwargs.get("minheap")
         self.minheap_values: Dict[str, Dict[str, int]]
         self.minheap_values = kwargs.get("minheap_values", {})
         if not isinstance(self.minheap_values, dict):
             raise TypeError(
-                "The minheap_values of {} should be a dictionary".format(self.name))
+                "The minheap_values of {} should be a dictionary".format(self.name)
+            )
         if self.minheap:
-            if not is
+            if not isinstance(self.minheap, str):
+                raise TypeError(
+                    "The minheap of {} should be a string that selects from a minheap_values".format(
+                        self.name
+                    )
+                )
+            if self.minheap not in self.minheap_values:
+                raise KeyError(
+                    "{} is not a valid entry of {}.minheap_values".format(
+                        self.name, self.name
+                    )
+                )
         self.timeout: Optional[int]
         self.timeout = kwargs.get("timeout")
 
